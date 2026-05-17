@@ -119,6 +119,11 @@
         width: 45%;
         margin-bottom: 30px;
     }
+    
+    .signup-form {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
 }
 
 /* Desktop styles - min-width: 1025px */
