@@ -1,16 +1,27 @@
 // Mobile menu toggle
 document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.querySelector('.menu-toggle');
-    const navbar = document.querySelector('.navbar');
+    const nav = document.querySelector('.nav');
     
-    if (menuToggle && navbar) {
+    if (menuToggle && nav) {
         menuToggle.addEventListener('click', function() {
-            navbar.classList.toggle('active');
+            nav.classList.toggle('active');
             // Animate hamburger to X
             const hamburger = document.querySelector('.hamburger');
             hamburger.classList.toggle('active');
         });
     }
+    
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.nav a').forEach(link => {
+        link.addEventListener('click', function() {
+            if (nav && nav.classList.contains('active')) {
+                nav.classList.remove('active');
+                const hamburger = document.querySelector('.hamburger');
+                if (hamburger) hamburger.classList.remove('active');
+            }
+        });
+    });
     
     // Form validation
     const form = document.getElementById('signup-form');
@@ -53,14 +64,17 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
+                // Account for header height
+                const headerHeight = document.querySelector('header').offsetHeight;
                 window.scrollTo({
-                    top: targetElement.offsetTop - 80, // Account for header height
+                    top: targetElement.offsetTop - headerHeight,
                     behavior: 'smooth'
                 });
                 
                 // Close mobile menu if open
-                if (navbar && navbar.classList.contains('active')) {
-                    navbar.classList.remove('active');
+                const nav = document.querySelector('.nav');
+                if (nav && nav.classList.contains('active')) {
+                    nav.classList.remove('active');
                     const hamburger = document.querySelector('.hamburger');
                     if (hamburger) hamburger.classList.remove('active');
                 }
@@ -75,4 +89,22 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.toggle('active');
         });
     }
+    
+    // Add fade-in animation to sections on scroll
+    const observerOptions = {
+        threshold: 0.1
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all sections
+    document.querySelectorAll('.section').forEach(section => {
+        observer.observe(section);
+    });
 });
